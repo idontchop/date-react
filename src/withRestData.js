@@ -17,7 +17,7 @@ const withRestData = url => Component => (
 
         componentDidMount () {
 
-            fetch ('/dating/api/', { 
+            fetch ('/dating/mainSearch/', { 
                 mode: 'no-cors' ,
                 credentials: 'include',
                 })

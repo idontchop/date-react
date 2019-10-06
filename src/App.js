@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import DatingListContainer from './DatingListContainer.js';
+import DatingSearchContainer from './DatingSearchContainer.js';
 import withRestData from './withRestData.js';
 
 function App() {
@@ -9,7 +10,10 @@ function App() {
   const DatingList = withData ( DatingListContainer );
 
   return (
-    <DatingList />
+    <div>
+    <DatingSearchContainer />
+
+    </div>
   );
 }
 
