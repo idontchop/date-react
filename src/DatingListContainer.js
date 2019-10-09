@@ -12,12 +12,12 @@ class DatingListContainer extends React.Component {
 
     constructor (props) {
         super (props);
-        console.log(props);
+        console.log(props+ "DatingListContainer-constructor");
     }
 
     componentDidUpdate ( newProps, newState) {
-        console.log (newProps);
-        console.log (newState);
+        console.log (newProps + "DatingListContainer-componentDidUpdate");
+        console.log (newState + "DatingListContainer-componentDidUpdate");
     }
 
     render () {

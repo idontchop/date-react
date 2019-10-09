@@ -12,6 +12,8 @@ class DatingSearchContainer extends React.Component {
         // Fetch 
         this.restUrl = '/dating/mainSearch/';
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
+        this.restInteractionsUrl = '/dating/interactionsList';
+
 
         // data structure for profiles
         this.profileList = [];
@@ -23,6 +25,8 @@ class DatingSearchContainer extends React.Component {
             maxPage: 0     // will be reset by fetch
         };
 
+        // For debug purposes until we have a form
+        this.useLocation = false;
         // initial location
         navigator.geolocation.getCurrentPosition( (position) => {
             this.state.sloc = `&lat=${position.coords.latitude}&lng=${position.coords.longitude}`;
@@ -34,14 +38,20 @@ class DatingSearchContainer extends React.Component {
     /**
      * Helper function, returns the full GET url
      */
-    getUrl () {
-        return this.restUrl + `?perPage=${this.state.perPage}&page=${this.state.page}` +
-            (this.state.sloc != null ? this.state.sloc : "");
-
+    getUrl ( type ) {
+        if ( type === "interactions" )
+            return this.restInteractionsUrl;
+        else
+            return this.restUrl + `?perPage=${this.state.perPage}&page=${this.state.page}` +
+            ( (this.useLocation && this.state.sloc != null) ? this.state.sloc : "");
     }
 
     componentDidMount () {
         this.newSearch();
+    }
+
+    componentDidUpdate () {
+        this.loadInteractions();
     }
 
 
@@ -84,8 +94,39 @@ class DatingSearchContainer extends React.Component {
         .then ( response => response.json() )
         .then ( responseData => this.setState ({data: responseData}))
         .catch ( err => console.error(err));
+
+        // load interactions after getting the search
+       
     }
 
+    /**
+     * Uses the content list to update any necessary interactions for every user on the
+     * search list.
+     * This is separate from the search list so we can split it to a microservice and keep
+     * speed of main search up.
+     */
+    loadInteractions () {
+
+        console.log ( "load interactions: " );
+        var listToFetch = [];
+        if ( this.state.data != null ) {
+            console.log (this.state);
+            this.state.data.content.forEach ( e => {
+                if ( e.interactions == null ) {
+                    // The list of interactions is stored in object in each content (each user)
+                    // if an interaction object is not found, the id added to list for fetch call
+                    listToFetch.push(e.id);
+                    
+                }
+            });
+
+            // if we need to fetch some interactions, do it here
+            fetch ( this.getUrl( "interactions" ) + "?userList=" + listToFetch.join(","), this.headerArgs )
+            .then ( response => response.json() )
+            .then ( responseData => responseData.connections.forEach(e => console.log(e)) )
+            .catch ( err => console.err(err));
+        }
+    }
 
     render () {
         
