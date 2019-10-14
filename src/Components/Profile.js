@@ -18,10 +18,10 @@ const Profile = (props) => (
         <p><b>Birthday:</b>{props.profile.birthday}</p>
         <p><b>Created:</b>{props.created}</p>
         <div>
-            <LikeButton />
-            <HideButton />
+            <LikeButton like = {props.interactions && props.interactions.like} />
+            <HideButton hide = {props.interactions && props.interactions.like} />
             <BlockButton />
-            <FavoriteButton />
+            <FavoriteButton favorite = {props.interactions && props.interactions.favorite}/>
         </div>
     </div>
 )

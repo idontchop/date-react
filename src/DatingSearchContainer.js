@@ -120,12 +120,24 @@ class DatingSearchContainer extends React.Component {
                 }
             });
 
-            // if we need to fetch some interactions, do it here
-            fetch ( this.getUrl( "interactions" ) + "?userList=" + listToFetch.join(","), this.headerArgs )
-            .then ( response => response.json() )
-            .then ( responseData => responseData.connections.forEach(e => console.log(e)) )
-            .catch ( err => console.err(err));
+            if ( listToFetch.length > 0 ) {
+                // if we need to fetch some interactions, do it here
+                fetch ( this.getUrl( "interactions" ) + "?userList=" + listToFetch.join(","), this.headerArgs )
+                .then ( response => response.json() )
+                .then ( responseData => {
+                    this.contentEdit = this.state.data.content;
+                    this.contentEdit.forEach ( e => {
+                        e.interactions = {};
+                        e.interactions.connection = responseData.connections.includes (e.id) ? true : false;
+                        e.interactions.favorite = responseData.favorites.includes (e.id) ? true : false;
+                        e.interactions.like = responseData.likes.includes (e.id) ? true : false;
+                    })
+                    this.setState (this.state.data.content);
+                } )
+                .catch ( err => console.err(err));
+            }
         }
+
     }
 
     render () {
