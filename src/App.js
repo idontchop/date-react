@@ -4,14 +4,19 @@ import './App.css';
 import DatingListContainer from './DatingListContainer.js';
 import DatingSearchContainer from './DatingSearchContainer.js';
 import withRestData from './withRestData.js';
+import UpdateProfile from './UpdateProfile.js';
 
 function App() {
   const withData = withRestData();
   const DatingList = withData ( DatingListContainer );
 
+  // TODO: test code
+  const Display = () => {return <UpdateProfile />};
+  //const Display = () => {return <DatingSearchContainer />};
+
   return (
     <div>
-    <DatingSearchContainer />
+    <Display />
 
     </div>
   );
