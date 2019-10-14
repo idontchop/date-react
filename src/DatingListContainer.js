@@ -33,7 +33,7 @@ class DatingListContainer extends React.Component {
                 <div>
                 {this.props.content.map( ( user ) =>                 
                     // Need Component to list each profile
-                    <Profile key={user.id} {...user} />)
+                    <Profile key={user.id} {...user} handler={{...this.props.handler}} />)
                 }
                 </div>
             )

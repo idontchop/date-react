@@ -12,7 +12,12 @@ class DatingSearchContainer extends React.Component {
         // Fetch 
         this.restUrl = '/dating/mainSearch/';
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
+        this.postHeaderArgs = { method: 'post', mode: 'no-cors', credentials: 'include'};
+        this.deleteHeaderArgs = { method: 'DELETE', 'content-type': 'application/json', credentials: 'include'};
         this.restInteractionsUrl = '/dating/interactionsList';
+        this.likeHandlerUrl = '/dating/addLike';
+        this.favoriteHandlerUrl = '/dating/addFav';
+        this.hideHandlerUrl = '/dating/addHide';
 
 
         // data structure for profiles
@@ -32,7 +37,18 @@ class DatingSearchContainer extends React.Component {
             this.state.sloc = `&lat=${position.coords.latitude}&lng=${position.coords.longitude}`;
             this.newSearch();
         } );
-            
+
+        // For setting up event handlers bubbler
+        this.getUrl = this.getUrl.bind(this);
+        this.likeHandler = this.likeHandler.bind(this);
+        this.favoriteHandler = this.favoriteHandler.bind(this);
+        this.hideHandler = this.hideHandler.bind(this);
+        this.blockHandler = this.blockHandler.bind(this);
+        
+        this.handler={  likeHandler: this.likeHandler, 
+                        favoriteHandler: this.favoriteHandler,
+                        hideHandler: this.hideHandler,
+                        blockHandler: this.blockHandler };
     }
 
     /**
@@ -41,6 +57,14 @@ class DatingSearchContainer extends React.Component {
     getUrl ( type ) {
         if ( type === "interactions" )
             return this.restInteractionsUrl;
+        else if ( type === "addLike" )
+            return this.likeHandlerUrl;
+        else if ( type === "addFavorite" )
+            return this.favoriteHandlerUrl;
+        else if ( type === "addHide" )
+            return this.hideHandlerUrl;
+        else if ( type === "addBlock" )
+            return this.blockHandlerUrl;
         else
             return this.restUrl + `?perPage=${this.state.perPage}&page=${this.state.page}` +
             ( (this.useLocation && this.state.sloc != null) ? this.state.sloc : "");
@@ -132,11 +156,93 @@ class DatingSearchContainer extends React.Component {
                         e.interactions.favorite = responseData.favorites.includes (e.id) ? true : false;
                         e.interactions.like = responseData.likes.includes (e.id) ? true : false;
                     })
-                    this.setState (this.state.data.content);
+                    this.setState ( { data: {content: this.contentEdit }});
                 } )
                 .catch ( err => console.err(err));
             }
         }
+
+    }
+
+    /**
+     * This calls the API and updates the like based on the button pressed.
+     * The server will return a message with the new state of the like.
+     * "like" "unlike" "connection"
+     * @param {id of profile liked} targetId 
+     */
+    likeHandler (targetId) {
+
+        // default we are adding
+        let headerArgs = this.postHeaderArgs;
+        // Loop through users to see if we should be removing
+        this.state.data.content.forEach ( e => {
+            if ( e.id === targetId && e.interactions.like === true ) {
+                headerArgs = this.deleteHeaderArgs;
+            }
+        })
+
+        fetch ( this.getUrl ("addLike") + "?target=" + targetId, headerArgs )
+        .then ( response => response.json() )
+        .then ( responseData => {
+           
+            this.contentEdit = this.state.data.content;
+            this.contentEdit.forEach ( e => {
+                if ( e.id === targetId && responseData.message === "added") 
+                    e.interactions.like = true;
+                else if ( e.id === targetId && responseData.message === "removed") 
+                    e.interactions.like = false;
+            });
+            this.setState ( {data: {content: this.contentEdit }});
+        })
+        .catch ( err => console.log(err));
+
+    }
+
+    favoriteHandler (targetId) {
+
+        // default we are adding
+        let headerArgs = this.postHeaderArgs;
+        // Loop through users to see if we should be removing
+        this.state.data.content.forEach ( e => {
+            if ( e.id === targetId && e.interactions.favorite === true ) {
+                headerArgs = this.deleteHeaderArgs;
+            }
+        })
+
+        fetch ( this.getUrl ("addFavorite") + "?target=" + targetId, headerArgs )
+        .then ( response => response.json() )
+        .then ( responseData => {
+            // TODO: check if added or removed
+
+            this.contentEdit = this.state.data.content;
+            this.contentEdit.forEach ( e => {
+                if ( e.id === targetId && responseData.message === "added")
+                     e.interactions.favorite = true;
+                else if ( e.id === targetId && responseData.message === "removed")
+                    e.interactions.favorite = false;
+            })
+            this.setState ( {data: {content: this.contentEdit}});
+
+        })
+        .catch ( err => console.log(err));
+    }
+
+    hideHandler (targetId) {
+
+        fetch ( this.getUrl ("addHide") + "?target=" + targetId, this.postHeaderArgs )
+        .then ( response => response.json() )
+        .then ( responseData => {
+            // TODO: check if add or remove
+
+            this.contentEdit =
+                this.state.data.content.filter ( e => e.id !== targetId);
+            this.setState ( {data: {content: this.contentEdit}});
+
+        })
+        .catch ( err => console.err(err));
+    }
+
+    blockHandler (targetId) {
 
     }
 
@@ -149,7 +255,7 @@ class DatingSearchContainer extends React.Component {
             );
         return (
             <div>
-            <DatingListContainer content={this.state.data.content} />
+            <DatingListContainer content={this.state.data.content} handler={this.handler} />
             <button onClick={ () => this.loadMoreProfiles() }>Load More</button>
             </div>
         );

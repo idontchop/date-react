@@ -1,5 +1,26 @@
 import React, {useState, useEffect } from 'react';
 
+const styleButtonTrue = {background: "white"};
+const styleButtonFalse = {background: "grey"};
+
+/**
+ * Handles the buttons for interactions.
+ * Accepts the name of the button title
+ * Id of target
+ * target: true of false
+ * handler: callback to api
+ * 
+ * @param { target, handler, title, id} props 
+ */
+const InteractionButtons = (props) => {
+
+    return (
+        <button style={ props.target ? styleButtonTrue : styleButtonFalse}
+        onClick={ () => props.handler(props.id) }> {props.title}
+        </button>
+    )
+}
+
 /**
  * These buttons will display the state of interactions as well as call
  * the api to change the state of interactions
@@ -7,23 +28,10 @@ import React, {useState, useEffect } from 'react';
  * @param {like, favorite} props 
  */
 const LikeButton = (props) => {
-    let styleButton = {};
 
-    // set initial like state from props
-    const [ like, setLike ] = useState ( false );
-
-    let styleButtonTrue = {background: "white"};
-    let styleButtonFalse = {background: "default"};
-    
-    useEffect ( () => {
-        if ( props.like != like ) {
-            setLike ( props.like );
-        }
-
-    })
-    
     return (
-        <button style={ like ? styleButtonTrue : styleButtonFalse }>Like
+        <button style={ props.like ? styleButtonTrue : styleButtonFalse }
+        onClick={props.handler.likeHandler.bind(this, props.id)}>Like
         </button>
     )
 }
@@ -36,7 +44,7 @@ const FavoriteButton = (props) => {
 
 const HideButton = (props) => {
     return (
-        <button>Hide</button>
+        <button onClick={props.handler.hideHandler.bind (this, props.id)}>Hide</button>
     )
 }
 
@@ -47,5 +55,6 @@ const BlockButton = (props) => {
     )
 }
 
-export default LikeButton;
-export {HideButton, FavoriteButton, BlockButton, LikeButton}
+
+export default InteractionButtons;
+

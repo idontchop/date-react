@@ -1,5 +1,5 @@
 import React from 'react';
-import LikeButton, { HideButton, FavoriteButton, BlockButton } from './InteractionsButtons.js';
+import InteractionButton from './InteractionsButtons.js';
 
 /**
  * Stateless render under DatingListContainer. This component renders one user
@@ -18,10 +18,19 @@ const Profile = (props) => (
         <p><b>Birthday:</b>{props.profile.birthday}</p>
         <p><b>Created:</b>{props.created}</p>
         <div>
-            <LikeButton like = {props.interactions && props.interactions.like} />
-            <HideButton hide = {props.interactions && props.interactions.like} />
-            <BlockButton />
-            <FavoriteButton favorite = {props.interactions && props.interactions.favorite}/>
+            <InteractionButton target = {props.interactions && props.interactions.like}
+                title="Like"
+                id={props.id}
+                handler={props.handler.likeHandler} />
+            <InteractionButton target = {props.interactions && props.interactions.hide}
+                title="Hide"
+                id={props.id}
+                handler = {props.handler.hideHandler} />
+            <InteractionButton title="Block"/>
+            <InteractionButton target = {props.interactions && props.interactions.favorite}
+                title="Favorite" 
+                id={props.id}
+                handler = {props.handler.favoriteHandler} />
         </div>
     </div>
 )
