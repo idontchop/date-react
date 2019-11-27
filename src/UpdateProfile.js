@@ -7,8 +7,10 @@ class UpdateProfile extends React.Component {
         // Fetch 
         this.restUrl = '/dating/MyProfile';
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
-        this.postHeaderArgs = { method: 'post', mode: 'no-cors', credentials: 'include'};
-        this.deleteHeaderArgs = { method: 'DELETE', 'content-type': 'application/json', credentials: 'include'};
+        this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
+            credentials: 'include'};
+        this.deleteHeaderArgs = { method: 'DELETE', 'content-type': 'application/json',
+            credentials: 'include'};
 
         this.state = { loading: true };
 
@@ -21,7 +23,7 @@ class UpdateProfile extends React.Component {
         fetch ( this.restUrl, this.headerArgs )
         .then ( response => response.json() )
         .then ( responseData => {
-            this.setState ( { "profile" : responseData } );
+            this.setState ( { "profile" : responseData, loading: false } );
         })
         .catch ( err => console.error(err));
 
@@ -29,16 +31,28 @@ class UpdateProfile extends React.Component {
 
     writeProfile () {
 
+        
         /* TODO: add profile to body */
-        fetch ( this.restUrl, this.postHeaderArgs )
+        fetch ( this.restUrl,  {
+            method: 'POST',
+            headers: this.postHeaderArgs,
+            body: JSON.stringify(this.state.profile)
+        } ) 
         .then ( response => response.json() )
-        .then ( responseData => {} )
+        .then ( responseData => { this.setState ({loading: false})} )
         .catch ( err => console.log (err) );
+
+        
 
     }
 
     handleSubmit (e) {
-        this.writeProfile();
+        if ( this.state.loading == false ) {
+            this.setState( { loading: true });
+            this.writeProfile();
+        } else {
+            // TODO: alert
+        }
     }
 
     handleChange (e) {
@@ -59,7 +73,8 @@ class UpdateProfile extends React.Component {
             );
         else
         return (
-            <form onSubmit={ e => this.handleSubmit(e) }>
+            <div>
+            <form >
                 <label>
                     Display Name:
                     <input
@@ -112,8 +127,9 @@ class UpdateProfile extends React.Component {
                         value={this.state.profile.lookingFor}
                         onChange= { e => this.handleChange(e)} />
                 </label>
-                <input type="submit" value="Update Profile" />
             </form>
+            <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
+            </div>
         );
     }
 }
