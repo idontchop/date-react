@@ -5,6 +5,7 @@ import DatingListContainer from './DatingListContainer.js';
 import DatingSearchContainer from './DatingSearchContainer.js';
 import withRestData from './withRestData.js';
 import UpdateProfile from './UpdateProfile.js';
+import CreateAccount from './CreateAccount.js';
 
 function App() {
   const withData = withRestData();
