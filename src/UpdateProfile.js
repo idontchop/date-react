@@ -25,7 +25,7 @@ class UpdateProfile extends React.Component {
         .then ( responseData => {
             this.setState ( { "profile" : responseData, loading: false } );
         })
-        .catch ( err => console.error(err));
+        .catch ( err => console.log(err));
 
     }
 
