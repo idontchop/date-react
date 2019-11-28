@@ -2,7 +2,7 @@ import React from 'react';
 
 class UpdateProfile extends React.Component {
 
-    constructor (props) {
+    constructor (props) { 
         super (props);
         // Fetch 
         this.restUrl = '/dating/MyProfile';
