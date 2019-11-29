@@ -3,13 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 import DatingListContainer from './DatingListContainer.js';
 import DatingSearchContainer from './DatingSearchContainer.js';
+import Main from './Main.js';
 import withRestData from './withRestData.js';
 import UpdateProfile from './UpdateProfile.js';
 import CreateAccount from './CreateAccount.js';
+import withModal from './withModal.js';
 
 function App() {
   const withData = withRestData();
   const DatingList = withData ( DatingListContainer );
+  const CreateForm = withModal ( CreateAccount, "Create Account" );
 
   // TODO: test code
   const Display = () => {return <UpdateProfile />};
@@ -17,7 +20,8 @@ function App() {
 
   return (
     <div>
-    <CreateAccount />
+      <CreateForm />
+    <Main />
 
     </div>
   );

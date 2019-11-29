@@ -31,7 +31,7 @@ class UpdateProfile extends React.Component {
 
     writeProfile () {
 
-        
+        console.log(this.state.profile);
         /* TODO: add profile to body */
         fetch ( this.restUrl,  {
             method: 'POST',
@@ -39,7 +39,8 @@ class UpdateProfile extends React.Component {
             body: JSON.stringify(this.state.profile)
         } ) 
         .then ( response => response.json() )
-        .then ( responseData => { this.setState ({loading: false})} )
+        .then ( responseData => { this.setState ({loading: false});
+                                    this.responseData = responseData; console.log(this.responseData);} )
         .catch ( err => console.log (err) );
 
         
@@ -73,62 +74,71 @@ class UpdateProfile extends React.Component {
             );
         else
         return (
+        
             <div>
-            <form >
-                <label>
-                    Display Name:
-                    <input
-                        name="displayName"
-                        type="text"
-                        value={this.state.profile.displayName}
-                        onChange={ e => this.handleChange(e) } />
-                </label>
-                <label>
-                    Birthday:
-                    <input
-                        name="birthday"
-                        type="text"
-                        value={this.state.profile.birthday}
-                        onChange={ e => this.handleChange(e) } />
-                </label>
-                <label>
-                    I am a:
-                    <select 
-                        value={this.state.profile.gender}
-                        name="gender" 
-                        onChange={ e => this.handleChange(e) } >
-                            <option value="Man">Man</option>
-                            <option value="Woman">Woman</option>
-                        </select>
-                </label>
-                <label>
-                    Seeking a:
-                    <select
-                        value={this.state.profile.interestedIn}
-                        name="interestedIn"
-                        onChange= { e => this.handleChange(e) } >
-                            <option value="Woman">Woman</option>
-                            <option value="Man">Man</option>
-                        </select>
-                </label>
-                <label>
-                    About You:
-                    <textarea
-                        name="aboutMe"
-                        type="textarea"
-                        value={this.state.profile.aboutMe}
-                        onChange={ e => this.handleChange(e) } />
-                </label>
-                <label>
-                    Looking For:
-                    <textarea
-                        name="lookingFor"
-                        type="textarea"
-                        value={this.state.profile.lookingFor}
-                        onChange= { e => this.handleChange(e)} />
-                </label>
-            </form>
-            <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
+                <a href="#updateProfile">Update Profile</a>
+
+                <div id="updateProfile" className="modalDialog">
+                    <div>
+                    <a href="#" title="Close" className="close">Close</a>
+                    <h2>Update Profile</h2>
+                <form >
+                    <label>
+                        Display Name:
+                        <input
+                            name="displayName"
+                            type="text"
+                            value={this.state.profile.displayName}
+                            onChange={ e => this.handleChange(e) } />
+                    </label>
+                    <label>
+                        Birthday:
+                        <input
+                            name="birthday"
+                            type="text"
+                            value={this.state.profile.birthday}
+                            onChange={ e => this.handleChange(e) } />
+                    </label>
+                    <label>
+                        I am a:
+                        <select 
+                            value={this.state.profile.gender}
+                            name="gender" 
+                            onChange={ e => this.handleChange(e) } >
+                                <option value="Man">Man</option>
+                                <option value="Woman">Woman</option>
+                            </select>
+                    </label>
+                    <label>
+                        Seeking a:
+                        <select
+                            value={this.state.profile.interestedIn}
+                            name="interestedIn"
+                            onChange= { e => this.handleChange(e) } >
+                                <option value="Woman">Woman</option>
+                                <option value="Man">Man</option>
+                            </select>
+                    </label>
+                    <label>
+                        About You:
+                        <textarea
+                            name="aboutMe"
+                            type="textarea"
+                            value={this.state.profile.aboutMe}
+                            onChange={ e => this.handleChange(e) } />
+                    </label>
+                    <label>
+                        Looking For:
+                        <textarea
+                            name="lookingFor"
+                            type="textarea"
+                            value={this.state.profile.lookingFor}
+                            onChange= { e => this.handleChange(e)} />
+                    </label>
+                </form>
+                <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
+                </div>
+                </div> {/*#updateProfile*/}
             </div>
         );
     }
