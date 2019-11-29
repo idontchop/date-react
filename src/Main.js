@@ -1,6 +1,7 @@
 import React from 'react';
 import DatingSearchContainer from './DatingSearchContainer';
 import UpdateProfile from './UpdateProfile.js';
+import withModal from './withModal.js';
 
 class Main extends React.Component {
 
@@ -12,6 +13,7 @@ class Main extends React.Component {
         this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
             credentials: 'include'};
 
+        
         this.state = { loading: true };
 
         this.fetchProfile();
@@ -24,23 +26,28 @@ class Main extends React.Component {
      * contains all information that is on a user's profile, such as
      * display name but doesn't have search preferences, security, etc
      */
-    fetchProfile () {
+    fetchProfile = async () => {
 
-        fetch ( this.restUrlProfile, this.headerArgs )
-        .then ( response => response.json() )
-        .then ( responseData => {
-            this.setState ( { "profile" : responseData, loading: false } );
-        })
-        .catch ( err => console.log(err));
+        // verbose
+        //let response = await fetch ( this.restUrlProfile, this.headerArgs );
+        //let responseData = await response.json();
 
+        let responseData = await ( 
+            await fetch ( this.restUrlProfile, this.headerArgs )).json();
+
+        this.setState ( { "profile": responseData, loading: false } );
+ 
     }
 
     render () {
+
+        let UpdateProfileWithModal = withModal(UpdateProfile, "Update Profile");        
+
         return (
             <div>
                 <h1>Dating Site Backend Prototype</h1>
                 <h2>Welcome {this.state.loading ? "User" : this.state.profile.displayName }</h2>
-                <UpdateProfile />
+                <UpdateProfileWithModal />
                 <DatingSearchContainer />
             </div>
         );

@@ -1,5 +1,6 @@
 import React from 'react';
 import DatingListContainer from './DatingListContainer.js';
+import MainSearchBar from './Components/MainSearchBar.js';
 
 /**
  * Over arching search component. Handles the user search preferences, paginations, etc
@@ -27,7 +28,10 @@ class DatingSearchContainer extends React.Component {
         this.state = {
             perPage: 5,     // arbitrary / not set by user / determines # profiles per load
             page: 0,
-            maxPage: 0     // will be reset by fetch
+            maxPage: 0,     // will be reset by fetch
+
+            minAge: 18,     // handled by handleSearchPrefChange (MainSearchBar componnet)
+            maxAge: 80
         };
 
         // For debug purposes until we have a form
@@ -246,6 +250,21 @@ class DatingSearchContainer extends React.Component {
 
     }
 
+    /**
+     * Passed down to MainSearchBar. Manages the search prefs from user.
+     * 
+     * @param {} event 
+     */
+    handleSearchPrefChange = ( event ) => {
+
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState ( { [name] : value} );
+
+    }
+
     render () {
         
         // TODO: need spinner
@@ -255,6 +274,7 @@ class DatingSearchContainer extends React.Component {
             );
         return (
             <div>
+            <MainSearchBar {...this.state} handleChange={this.handleSearchPrefChange} />
             <DatingListContainer content={this.state.data.content} handler={this.handler} />
             <button onClick={ () => this.loadMoreProfiles() }>Load More</button>
             </div>

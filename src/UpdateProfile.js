@@ -74,14 +74,7 @@ class UpdateProfile extends React.Component {
             );
         else
         return (
-        
             <div>
-                <a href="#updateProfile">Update Profile</a>
-
-                <div id="updateProfile" className="modalDialog">
-                    <div>
-                    <a href="#" title="Close" className="close">Close</a>
-                    <h2>Update Profile</h2>
                 <form >
                     <label>
                         Display Name:
@@ -137,8 +130,6 @@ class UpdateProfile extends React.Component {
                     </label>
                 </form>
                 <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
-                </div>
-                </div> {/*#updateProfile*/}
             </div>
         );
     }
