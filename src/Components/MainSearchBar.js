@@ -10,7 +10,7 @@ const MainSearchBar = props => {
         return (
             <div>
                 <form>
-                    <label>
+                <label>
                         Min Age:
                         <input
                             name="minAge"
@@ -18,6 +18,15 @@ const MainSearchBar = props => {
                             value={props.minAge}
                             onChange = { e=> props.handleChange(e) } />
                     </label>
+                   <label>
+                        Max Age:
+                        <input
+                            name="maxAge"
+                            type="text"
+                            value={props.maxAge}
+                            onChange = { e=> props.handleChange(e) } />
+                    </label>
+                    { props.searchPrefsChanged ? <button>Update Search</button> : null }
                 </form>
             </div>
         )

@@ -31,7 +31,8 @@ class DatingSearchContainer extends React.Component {
             maxPage: 0,     // will be reset by fetch
 
             minAge: 18,     // handled by handleSearchPrefChange (MainSearchBar componnet)
-            maxAge: 80
+            maxAge: 80,
+            searchPrefsChanged: false
         };
 
         // For debug purposes until we have a form
@@ -71,7 +72,8 @@ class DatingSearchContainer extends React.Component {
             return this.blockHandlerUrl;
         else
             return this.restUrl + `?perPage=${this.state.perPage}&page=${this.state.page}` +
-            ( (this.useLocation && this.state.sloc != null) ? this.state.sloc : "");
+                    `&minAge=${this.state.minAge}&maxAge=${this.state.maxAge}` +
+                    ( (this.useLocation && this.state.sloc != null) ? this.state.sloc : "");
     }
 
     componentDidMount () {
@@ -261,7 +263,7 @@ class DatingSearchContainer extends React.Component {
         const value = target.value;
         const name = target.name;
 
-        this.setState ( { [name] : value} );
+        this.setState ( { [name] : value, searchPrefsChanged: true } );
 
     }
 
