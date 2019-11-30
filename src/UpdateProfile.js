@@ -1,4 +1,5 @@
 import React from 'react';
+import UserMedia from './Components/UserMedia';
 
 class UpdateProfile extends React.Component {
 
@@ -9,6 +10,8 @@ class UpdateProfile extends React.Component {
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
         this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
             credentials: 'include'};
+        this.imageUploadHeaderArgs = { method: 'POST', mode: 'no-cors',
+             credentials: 'include'}
         this.deleteHeaderArgs = { method: 'DELETE', 'content-type': 'application/json',
             credentials: 'include'};
 
@@ -77,7 +80,28 @@ class UpdateProfile extends React.Component {
         this.setState ( { "profile" : prevProfile } );
     }
 
+    handleFileChange (e) {
+        this.profilePic = e.target.files[0];
+
+        const formData = new FormData();
+        formData.append(
+            'file',
+            this.profilePic,
+            'profilePic'
+        );
+        fetch ( '/dating/uploadImage',  {
+            method: 'POST',
+            headers: this.imageUploadHeaderArgs,
+            body: formData
+        } ) 
+        .then ( response => response.json() )
+        .then ( responseData => { this.setState ({loading: false});
+                                    this.responseData = responseData; console.log(this.responseData);} )
+        .catch ( err => console.log (err) );
+    }
+
     render () {
+        
         if ( this.state.profile == null )
             return (
                 <div><img src="./images/Loading_icon.gif" /></div>
@@ -138,7 +162,15 @@ class UpdateProfile extends React.Component {
                             value={this.state.profile.lookingFor}
                             onChange= { e => this.handleChange(e)} />
                     </label>
+                    <label>
+                        Profile pic:
+                        <input 
+                            type="file"
+                            name = "profilePic"
+                            onChange = { e => this.handleFileChange(e) } />
+                    </label>
                 </form>
+                <UserMedia id={this.state.profile.id} />
                 <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
             </div>
         );

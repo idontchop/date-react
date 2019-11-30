@@ -36,7 +36,7 @@ const StyledButton = styled.button`
 const InteractionButtons = (props) => {
 
     return (
-        <StyledButton onClick={ () => props.handler(props.id) } target={props.target}> {props.title}
+        <StyledButton onClick={ () => props.handler(props.id) } target={props.target? 'true' : 'false' }> {props.title}
         </StyledButton>
     )
 }

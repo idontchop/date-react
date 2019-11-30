@@ -41,10 +41,15 @@ class Main extends React.Component {
  
     }
 
+    /**
+     * I give up...
+     * doesn't work because development in Node?
+     */
     logout = async () => {
 
         let response = await fetch ( this.logoutUrl, this.postHeaderArgs );
         console.log (response);
+        localStorage.clear();
 
     }
 
