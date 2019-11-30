@@ -11,7 +11,7 @@ const Profile = (props) => (
     <div>
         <div>
             { props.media[0] && <img src={"http://localhost:8080/dating/image/" + props.media[0].id} style={{width:50, height:50}} /> }
-            <h2 style={{display: "inline-block"}}>{props.id + ": " + props.profile.displayName}</h2>
+            <h2 style={{display: "inline-block"}}>{props.id + ": " + props.profile.displayName + " - " + props.profile.age}</h2>
         </div>
         <p><b>About Me:</b>{props.profile.aboutMe}</p>
         <p><b>Looking For:</b>{props.profile.lookingFor}</p>

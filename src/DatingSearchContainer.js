@@ -267,6 +267,11 @@ class DatingSearchContainer extends React.Component {
 
     }
 
+    handleSearchSubmit = ( event ) => {
+        event.preventDefault();
+        this.newSearch();
+    }
+
     render () {
         
         // TODO: need spinner
@@ -276,7 +281,9 @@ class DatingSearchContainer extends React.Component {
             );
         return (
             <div>
-            <MainSearchBar {...this.state} handleChange={this.handleSearchPrefChange} />
+            <MainSearchBar {...this.state} 
+                handleChange={this.handleSearchPrefChange }
+                handleSearchSubmit = { this.handleSearchSubmit } />
             <DatingListContainer content={this.state.data.content} handler={this.handler} />
             <button onClick={ () => this.loadMoreProfiles() }>Load More</button>
             </div>

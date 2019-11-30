@@ -3,19 +3,19 @@ import React from 'react';
 const modelStyle = {
     display: "none",
     position: "fixed",
-    "z-index": "1",
-    "padding-top": "100px",
+    zIndex: "1",
+    paddingTop: "100px",
     left: "0",
     top: "0",
     width: "100%",
     height: "100%",
     overflow: "auto",
-    "background-color": "rgb(0,0,0)",
-    "background-color": "rgba(0,0,0,0.4)"
+    backgroundColor: "rgb(0,0,0)",
+    backgroundColor: "rgba(0,0,0,0.4)"
 }
 
 const modelContentStyle = {
-    "background-color": "#fefefe",
+    backgroundColor: "#fefefe",
     margin: "auto",
     padding: "20px",
     border: "1px solid #888",
@@ -25,8 +25,8 @@ const modelContentStyle = {
 const closeButtonStyle = {
     color: "#aaaaaa",
     float: "right",
-    "font-size": "25px",
-    "font-weight": "bold"
+    fontSize: "25px",
+    fontWeight: "bold"
 }
 
 

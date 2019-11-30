@@ -14,16 +14,26 @@ class UpdateProfile extends React.Component {
 
         this.state = { loading: true };
 
+    }
+
+    componentDidMount () {
+
+        this._isMounted = true;
         this.fetchProfile();
 
     }
 
+    componentWillUnmount () {
+
+        this._isMounted = false;
+    }
+
     fetchProfile () {
 
-        fetch ( this.restUrl, this.headerArgs )
+        this._isMounted && fetch ( this.restUrl, this.headerArgs )
         .then ( response => response.json() )
         .then ( responseData => {
-            this.setState ( { "profile" : responseData, loading: false } );
+             this.setState ( { "profile" : responseData, loading: false } );
         })
         .catch ( err => console.log(err));
 

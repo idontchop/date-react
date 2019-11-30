@@ -9,7 +9,7 @@ const MainSearchBar = props => {
 
         return (
             <div>
-                <form>
+                <form onSubmit= { e => props.handleSearchSubmit(e) }>
                 <label>
                         Min Age:
                         <input

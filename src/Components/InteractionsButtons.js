@@ -1,8 +1,34 @@
 import React, {useState, useEffect } from 'react';
+import styled from 'styled-components';
 
 const styleButtonTrue = {background: "white"};
 const styleButtonFalse = {background: "grey"};
 
+const styledButton = styled.button`
+    cursor: pointer;
+    padding: 5px 8px;
+    text-align: center;
+    font-size: 10px;
+    margin: 4px;
+    opacity: 0.6;
+    transition: 0.3s;
+
+    &:hover {
+        color: black;
+        opacity: 1;
+    }
+`;
+const styledButtonTrue = styled(styledButton)`
+
+    background: white;
+
+`;
+
+const styledButtonFalse = styled(styledButton)`
+
+    background: grey;
+
+`;
 /**
  * Handles the buttons for interactions.
  * Accepts the name of the button title
@@ -14,10 +40,13 @@ const styleButtonFalse = {background: "grey"};
  */
 const InteractionButtons = (props) => {
 
+    let Button;
+    if ( props.target ) Button = styledButtonTrue;
+    else Button = styledButtonFalse;
+
     return (
-        <button style={ props.target ? styleButtonTrue : styleButtonFalse}
-        onClick={ () => props.handler(props.id) }> {props.title}
-        </button>
+        <Button onClick={ () => props.handler(props.id) }> {props.title}
+        </Button>
     )
 }
 
