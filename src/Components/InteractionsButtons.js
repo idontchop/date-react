@@ -4,31 +4,26 @@ import styled from 'styled-components';
 const styleButtonTrue = {background: "white"};
 const styleButtonFalse = {background: "grey"};
 
-const styledButton = styled.button`
+/**
+ * From styled-components plugin
+ */
+const StyledButton = styled.button`
     cursor: pointer;
     padding: 5px 8px;
     text-align: center;
     font-size: 10px;
     margin: 4px;
-    opacity: 0.6;
+    opacity: 0.8;
     transition: 0.3s;
+    background: ${props => props.target ? 'grey' : 'white' }
 
     &:hover {
         color: black;
+        background-color: ${props => props.target ? 'grey' : 'OldLace' };
         opacity: 1;
     }
 `;
-const styledButtonTrue = styled(styledButton)`
 
-    background: white;
-
-`;
-
-const styledButtonFalse = styled(styledButton)`
-
-    background: grey;
-
-`;
 /**
  * Handles the buttons for interactions.
  * Accepts the name of the button title
@@ -40,13 +35,9 @@ const styledButtonFalse = styled(styledButton)`
  */
 const InteractionButtons = (props) => {
 
-    let Button;
-    if ( props.target ) Button = styledButtonTrue;
-    else Button = styledButtonFalse;
-
     return (
-        <Button onClick={ () => props.handler(props.id) }> {props.title}
-        </Button>
+        <StyledButton onClick={ () => props.handler(props.id) } target={props.target}> {props.title}
+        </StyledButton>
     )
 }
 

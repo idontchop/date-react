@@ -2,6 +2,7 @@ import React from 'react';
 import DatingSearchContainer from './DatingSearchContainer';
 import UpdateProfile from './UpdateProfile.js';
 import withModal from './withModal.js';
+import Logout from './Components/Logout.js';
 
 class Main extends React.Component {
 
@@ -9,6 +10,7 @@ class Main extends React.Component {
         super(props);
 
         this.restUrlProfile = '/dating/MyProfile';
+        this.logoutUrl = '/dating/logout';
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
         this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
             credentials: 'include'};
@@ -39,6 +41,13 @@ class Main extends React.Component {
  
     }
 
+    logout = async () => {
+
+        let response = await fetch ( this.logoutUrl, this.postHeaderArgs );
+        console.log (response);
+
+    }
+
     render () {
 
         let UpdateProfileWithModal = withModal(UpdateProfile, "Update Profile");        
@@ -47,6 +56,7 @@ class Main extends React.Component {
             <div>
                 <h1>Dating Site Backend Prototype</h1>
                 <h2>Welcome {this.state.loading ? "User" : this.state.profile.displayName }</h2>
+                <Logout logout={this.logout} />
                 <UpdateProfileWithModal />
                 <DatingSearchContainer />
             </div>
