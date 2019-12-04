@@ -1,5 +1,7 @@
 import React from 'react';
 import UserMedia from './Components/UserMedia';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 class UpdateProfile extends React.Component {
 
@@ -108,6 +110,7 @@ class UpdateProfile extends React.Component {
             );
         else
         return (
+            <DndProvider backend={HTML5Backend}>
             <div>
                 <form >
                     <label>
@@ -173,6 +176,7 @@ class UpdateProfile extends React.Component {
                 <UserMedia id={this.state.profile.id} />
                 <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
             </div>
+            </DndProvider>
         );
     }
 }

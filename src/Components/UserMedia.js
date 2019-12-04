@@ -47,7 +47,7 @@ class UserMedia extends React.Component {
         console.log(this.state)
         console.log ( Array.from (this.state))
         const mediaList = this.state.mediaData.map ( (i) =>
-            <li key={i.id}><Media id={i.id} priority={i.priority} /></li>
+            <li key={i.id} style={ {display: "inline-block"} }><Media id={i.id} priority={i.priority} /></li>
         );
         return <div>{mediaList}</div>
     }
