@@ -40,6 +40,26 @@ class UserMedia extends React.Component {
     }
 
     /**
+     * Sends updated media data to server
+     */
+    async postMedia () {
+        
+        let response = await fetch ( this.restUrl, {
+            method: 'POST',
+            headers: this.postHeaderArgs,
+            body: JSON.stringify(this.state.mediaDataState)
+        } );
+        
+        if ( !response.ok ) {
+            //TODO: server responsed with error
+            console.log("Error: server responded " + response.status);
+        } else {
+            // TODO: put a checkmark somewhere
+        }
+
+    }
+
+    /**
      * Passed as a prop to media to be called with drag and drop.
      * 
      * @param {media being dragged} from 
@@ -72,6 +92,9 @@ class UserMedia extends React.Component {
         });
 
         this.sortMedia();
+
+        // finally, write it to server
+        this.postMedia();
     }
 
     /**
