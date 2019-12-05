@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ItemTypes } from '../Constants/ItemTypes.js'
-import { useDrag } from 'react-dnd'
+import { useDrag, useDrop } from 'react-dnd'
 
 /**
  * receives the id for an image, fetches, and displays it
@@ -9,11 +9,20 @@ import { useDrag } from 'react-dnd'
 
 const Media = (props) => {
 
+    /**
+     * react-dnd hooks
+     */
     const [{isDragging}, drag] = useDrag ( {
-        item: { type: ItemTypes.PROFILEIMAGE },
-        collect: monitor => ({
+        item: { type: "profileMedia", id: props.id },
+        begin:  () => {/* test drag */},
+        collect: monitor => ({            
             isDragging: !!monitor.isDragging(),
         }),
+    })
+
+    const [{isOver, canDrop}, drop] = useDrop ( {
+        accept: "profileMedia",
+        drop: ( item ) => props.swapMedia( item.id, props.id ),
     })
 
     const ProfileImage = styled.img`
@@ -27,9 +36,11 @@ const Media = (props) => {
         fontSize: 25,
         fontWeight: bold        
     `;
-
-    console.log("Media: " + props)
-    return <ProfileImage ref={drag}  src={"/dating/image/" + props.id } />
+    
+    return (<div ref={drop}>
+                <ProfileImage ref={drag}  src={"/dating/image/" + props.id } />
+            </div>
+    )
 }
 
 export default Media;

@@ -32,13 +32,61 @@ class UserMedia extends React.Component {
 
         let response = await fetch ( this.restUrl, this.headerArgs );
 
-        let mediaData = await response.json();
+        this.mediaData = await response.json();
 
-        // sory by priority
-        mediaData.sort( (a, b) => a.priority > b.priority ? 1 : -1);
-
-        this.setState({mediaData: mediaData});
+        this.sortMedia();
+        this.swapMedia ( 150, 199);
         
+    }
+
+    /**
+     * Passed as a prop to media to be called with drag and drop.
+     * 
+     * @param {media being dragged} from 
+     * @param {dropped target} to 
+     */
+    swapMedia ( from, to ) {
+
+        let swapPriority = -1;
+        let toIndex = -1;
+
+        console.log ("Swap media: " + from + " " + to)
+        // find to target, save priority/index, 
+        this.mediaData.forEach ( (i,index) => {
+            if ( i.id === to ) {
+                swapPriority = i.priority; toIndex = index;
+            }
+
+        });
+
+        if ( swapPriority === -1 || toIndex === -1 ) {
+            console.log ("Error swapMedia -1"); return;
+        }
+
+        // find from target and swap priorities
+        this.mediaData.forEach ( (i, index)  => {
+            if ( i.id === from ) {
+                this.mediaData[toIndex].priority = i.priority;
+                i.priority = swapPriority;
+            }
+        });
+
+        this.sortMedia();
+    }
+
+    /**
+     * puts this.state.mediaData in order by priority
+     * and sets the state
+     */
+    sortMedia () {
+
+        // sort by priority
+        console.log ("sort:" + this.mediaData);
+        console.log(this.mediaData);
+        this.mediaData.sort( (a, b) => a.priority > b.priority ? 1 : -1);
+
+        this.setState({mediaDataState: this.mediaData});
+
     }
 
     render() {
@@ -46,8 +94,8 @@ class UserMedia extends React.Component {
         console.log("This state: " + this.state)
         console.log(this.state)
         console.log ( Array.from (this.state))
-        const mediaList = this.state.mediaData.map ( (i) =>
-            <li key={i.id} style={ {display: "inline-block"} }><Media id={i.id} priority={i.priority} /></li>
+        const mediaList = this.state.mediaDataState.map ( (i) =>
+            <li key={i.id} style={ {display: "inline-block"} }><Media id={i.id} priority={i.priority} swapMedia={ (from, to) => this.swapMedia(from, to)} /></li>
         );
         return <div>{mediaList}</div>
     }
