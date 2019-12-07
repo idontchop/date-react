@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ItemTypes } from '../Constants/ItemTypes.js'
 import { useDrag, useDrop } from 'react-dnd'
 
 /**
  * receives the id for an image, fetches, and displays it
+ * Displayed under UpdateProfile
+ * 
+ * props:   id = the id of the media, will be used to retrieve from api
+ *                  If id === 'add', it is the add button and is not swappable
+ *          swapMedia = callback to method for swapping order and posting to api
+ * 
  */
 
 const Media = (props) => {
@@ -37,6 +42,14 @@ const Media = (props) => {
         fontWeight: bold        
     `;
     
+    // render the add button
+    if ( props.id === "add" ) 
+        return (    <div>
+                        open add modal
+                    </div>
+        )
+    // else assume prop is image id
+    else 
     return (<div ref={drop}>
                 <ProfileImage ref={drag}  src={"/dating/image/" + props.id } />
             </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Media from './Media.js';
+import Dropzone from 'react-dropzone';
 
 /**
  * Receives the id of the user, then retrives the user's list of media
@@ -19,6 +20,8 @@ class UserMedia extends React.Component {
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
         this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
             credentials: 'include'};
+        this.imageUploadHeaderArgs = { method: 'POST', mode: 'no-cors',
+            credentials: 'include'}            
 
         this.fetchMedia(props.id);
     }
@@ -112,15 +115,65 @@ class UserMedia extends React.Component {
 
     }
 
+    componentDidUpdate () {
+        
+    }
+
+    /**
+     * TODO: figure out how to set priority
+     * 
+     * @param {} acceptedFiles 
+     */
+    async onAddDrop ( acceptedFiles ) {
+        
+        acceptedFiles.forEach ( async (file) => {
+
+                const formData = new FormData();
+
+               
+                formData.append (
+                    'file',
+                    file,
+                    'profilePic'
+                );
+
+                let response = await fetch ( '/dating/uploadImage', {
+                    method: 'POST',
+                    headers: this.imageUploadHeaderArgs,
+                    body: formData
+                } )
+
+                //let responseData = await response.json();
+
+                console.log(response);
+                       
+        })
+
+    }
+
+
     render() {
         if (this.state == null) return <div></div>
         console.log("This state: " + this.state)
         console.log(this.state)
         console.log ( Array.from (this.state))
-        const mediaList = this.state.mediaDataState.map ( (i) =>
+        let mediaList = this.state.mediaDataState.map ( (i) =>
             <li key={i.id} style={ {display: "inline-block"} }><Media id={i.id} priority={i.priority} swapMedia={ (from, to) => this.swapMedia(from, to)} /></li>
         );
-        return <div>{mediaList}</div>
+        
+        return  <div>
+                    {mediaList}
+                    <li key={"add"} style = { {display: "inline-block" } }>
+                        <Dropzone onDrop={ (e) => this.onAddDrop(e) }>
+                            {( {getRootProps, getInputProps} ) => (
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    Add
+                                </div>
+                            )}
+                        </Dropzone>
+                    </li>
+                </div>
     }
 }
 

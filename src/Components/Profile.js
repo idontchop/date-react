@@ -3,7 +3,8 @@ import InteractionButton from './InteractionsButtons.js';
 
 /**
  * Stateless render under DatingListContainer. This component renders one user
- * profile
+ * profile as part of a list.
+ * 
  * @param {user} props 
  */
 const Profile = (props) => (

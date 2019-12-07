@@ -166,7 +166,7 @@ class UpdateProfile extends React.Component {
                             onChange= { e => this.handleChange(e)} />
                     </label>
                     <label>
-                        Profile pic:
+                        Upload pic:
                         <input 
                             type="file"
                             name = "profilePic"
