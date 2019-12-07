@@ -137,18 +137,37 @@ class UserMedia extends React.Component {
                     'profilePic'
                 );
 
+                formData.append (
+                    'priority',
+                    this.findLastPriority()
+                )
+
+
                 let response = await fetch ( '/dating/uploadImage', {
                     method: 'POST',
                     headers: this.imageUploadHeaderArgs,
                     body: formData
                 } )
 
-                //let responseData = await response.json();
-
-                console.log(response);
+                // response is good, refetch to update UI
+                if ( response.status === 200) {
+                    this.fetchMedia();
+                }
                        
         })
 
+    }
+
+    /**
+     * returns last priority from this.state.mediaDataState
+     * used for adding new images
+     */
+    findLastPriority () {
+        let highest = 0;
+        this.state.mediaDataState.forEach ( (m) =>{
+            highest = Math.max(highest, m.priority)
+        })
+        return highest + 1
     }
 
 
