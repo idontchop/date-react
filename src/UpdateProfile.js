@@ -2,6 +2,9 @@ import React from 'react';
 import UserMedia from './Components/UserMedia';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import ViewProfile from './ViewProfile.js';
+import withModal from './withModal.js'
+import { thisExpression } from '@babel/types';
 
 class UpdateProfile extends React.Component {
 
@@ -9,6 +12,7 @@ class UpdateProfile extends React.Component {
         super (props);
         // Fetch 
         this.restUrl = '/dating/MyProfile';
+        this.restUserUrl = '/dating/ViewUser'; // used to fetch the whole user for ViewProfile Component
         this.headerArgs = { mode: 'no-cors', credentials: 'include' };
         this.postHeaderArgs = { method: 'POST', mode: 'no-cors', 'content-type': 'application/json', 
             credentials: 'include'};
@@ -18,6 +22,7 @@ class UpdateProfile extends React.Component {
             credentials: 'include'};
 
         this.state = { loading: true };
+        
 
     }
 
@@ -25,6 +30,7 @@ class UpdateProfile extends React.Component {
 
         this._isMounted = true;
         this.fetchProfile();
+        //this.fetchUser();
 
     }
 
@@ -33,13 +39,40 @@ class UpdateProfile extends React.Component {
         this._isMounted = false;
     }
 
+    viewOwnProfile () {
+        if (!!this.state.user) {
+            let ViewProfileWithModal = withModal ( ViewProfile, "View Your Profile")
+            return <ViewProfileWithModal {...this.state.user} />
+        } else return <div></div>;
+    }
+
+    async fetchUser (id) {
+
+        console.log("fetichuser: ")
+        if (this._isMounted) {
+            
+            let response = await fetch ( this.restUserUrl + "?id=" + 42);
+            console.log(response)
+            let responseData = await response.json();
+
+            
+            this.setState({user: responseData});
+            console.log("after fetchuser: ")
+            console.log(this.state)
+
+        }
+        
+    }
+
     fetchProfile () {
 
         this._isMounted && fetch ( this.restUrl, this.headerArgs )
         .then ( response => response.json() )
         .then ( responseData => {
              this.setState ( { "profile" : responseData, loading: false } );
+             return responseData.id;
         })
+        .then ( id => this.fetchUser(id) )
         .catch ( err => console.log(err));
 
     }
@@ -175,6 +208,8 @@ class UpdateProfile extends React.Component {
                 </form>
                 <UserMedia id={this.state.profile.id} />
                 <button onClick= { e => this.handleSubmit (e) }>{ this.state.loading ? "*" : "Save"}</button>
+                
+                { this.viewOwnProfile() }
             </div>
             </DndProvider>
         );

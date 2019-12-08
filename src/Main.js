@@ -2,6 +2,7 @@ import React from 'react';
 import DatingSearchContainer from './DatingSearchContainer';
 import UpdateProfile from './UpdateProfile.js';
 import withModal from './withModal.js';
+import withNavigation from './withNavigation.js';
 import Logout from './Components/Logout.js';
 
 class Main extends React.Component {
@@ -55,14 +56,16 @@ class Main extends React.Component {
 
     render () {
 
-        let UpdateProfileWithModal = withModal(UpdateProfile, "Update Profile");        
+        let UpdateProfileWithModal = withModal(UpdateProfile, "Update Profile");     
+        let UpdateProfileWithNavigation = withNavigation(UpdateProfile);
+        // withNavigation should be used with routing mechanism
 
         return (
             <div>
                 <h1>Dating Site Backend Prototype</h1>
                 <h2>Welcome {this.state.loading ? "User" : this.state.profile.displayName }</h2>
                 <Logout logout={this.logout} />
-                <UpdateProfileWithModal />
+                <UpdateProfileWithModal />             
                 <DatingSearchContainer />
             </div>
         );

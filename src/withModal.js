@@ -15,7 +15,7 @@ const modelStyle = {
 }
 
 const modelContentStyle = {
-    backgroundColor: "#fefefe",
+    backgroundColor: "#fefef1",
     margin: "auto",
     padding: "20px",
     border: "1px solid #888",
@@ -71,7 +71,7 @@ const withModal = (Component, componentTitle) => (
                         <a href="#" title="Close"
                             style={closeButtonStyle}
                             onClick = { () => this.setState( {display: "none"} ) }>X</a>
-                        <Component />
+                        <Component {...this.props} />
                     </div>
                 </div>
             </div>

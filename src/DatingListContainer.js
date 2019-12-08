@@ -1,5 +1,7 @@
 import React from 'react';
 import Profile from './Components/Profile.js';
+import withModal from './withModal.js';
+import ViewProfile from './ViewProfile.js';
 
 /**
  * Is passed the base API from the Spring backend.
@@ -22,10 +24,12 @@ class DatingListContainer extends React.Component {
 
     render () {
 
+        // Setup view profile modal
+        const ViewProfileWithModal = withModal(ViewProfile,"View Profile");
+
         // this component will sometimes be rendered before rest call is made
         // TODO: Need working spinner
         if ( this.props == null ) return <div></div>
-
         // this render is after rest call
         else {
             console.log (this.props);
@@ -33,7 +37,10 @@ class DatingListContainer extends React.Component {
                 <div>
                 {this.props.content.map( ( user ) =>                 
                     // Need Component to list each profile
-                    <Profile key={user.id} {...user} handler={{...this.props.handler}} />)
+                    <div key={user.id} >
+                        <ViewProfileWithModal {...user} />
+                        <Profile {...user} handler={{...this.props.handler}} />
+                    </div>)
                 }
                 </div>
             )
