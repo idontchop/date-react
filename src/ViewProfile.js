@@ -80,7 +80,7 @@ export default class ViewProfile extends React.Component {
                     />)}
             </div>)
                 
-            : {};
+            : <div></div>;
 
 
         }
@@ -108,6 +108,8 @@ export default class ViewProfile extends React.Component {
             <p>{text}</p>
         </div>)
     }
+
+    
     render () {
         console.log(this.props)
         return  (<div>

@@ -51,7 +51,8 @@ class UpdateProfile extends React.Component {
         console.log("fetichuser: ")
         if (this._isMounted) {
             
-            let response = await fetch ( this.restUserUrl + "?id=" + 42);
+            // TODO: figure out how to transfer user id
+            let response = await fetch ( this.restUserUrl + "?id=" + 7);
             console.log(response)
             let responseData = await response.json();
 
