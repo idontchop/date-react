@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import ProfileDropdown from './ProfileDropdown';
 
 const ProfileWrapperDiv = styled.div`
-    background-color: white;
     max-width: 500px;
     height: auto;
 `;
@@ -15,6 +14,10 @@ const HeaderDiv = styled.div`
 const ProfileImage = styled.img`
     width: 100%;
     height: auto;
+    max-height: 600px
+    position: relative;
+    z-index: -1;
+    object-fit: cover;
 `;
 
 const NameH2 = styled.h2`
@@ -36,6 +39,27 @@ const CityAgeH2 = styled.h2`
     margin: 0;
 `;
 
+const AboutMeDiv = styled.div`
+    margin: -0px 10px 10px 10px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    z-index: 0;
+    position: relative;
+    font-family: "Book Antiqua", serif;
+    font-size: 1em;
+    color: #682A2A;
+
+`;
+
+const ButtonsContainerDiv = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 100px
+    position: relative;
+    z-index: 0;
+    margin: -90px 0px 0px 0px;
+`;
 
 /**
  * Stateless render under DatingListContainer. This component renders one user
@@ -47,18 +71,15 @@ const Profile = (props) => (
 
     <ProfileWrapperDiv>
         <HeaderDiv>
-            <NameH2>{props.profile.displayName }</NameH2>
+            <NameH2 onClick={ () => props.focusProfileHandler() }>{props.profile.displayName }</NameH2>
             <CityAgeH2>{props.profile.age + " • " + "Los Angeles, CA"}</CityAgeH2> 
             <div style={{float: "right", margin: "20px"}}>
-                <ProfileDropdown />
+                <ProfileDropdown {...props} />
             </div>
         </HeaderDiv>
-        { props.media[0] && <ProfileImage src={"http://localhost:8080/dating/image/" + props.media[0].id}  /> }
-        <p><b>About Me:</b>{props.profile.aboutMe}</p>
-        <p><b>Looking For:</b>{props.profile.lookingFor}</p>
-        <p><b>Birthday:</b>{props.profile.birthday}</p>
-        <p><b>Created:</b>{props.created}</p>
-        <div>
+        { (props.media[0] && <ProfileImage src={"http://localhost:8080/dating/image/" + props.media[0].id}  /> ) }
+        { (!props.media[0] && <ProfileImage src={"http://localhost:8080/dating/image/1"} /> ) }   
+        <ButtonsContainerDiv>
             <InteractionButton target = {props.interactions && props.interactions.like}
                 title="Like"
                 id={props.id}
@@ -67,13 +88,25 @@ const Profile = (props) => (
                 title="Hide"
                 id={props.id}
                 handler = {props.handler.hideHandler} />
-            <InteractionButton title="Block"/>
-            <InteractionButton target = {props.interactions && props.interactions.favorite}
-                title="Favorite" 
-                id={props.id}
-                handler = {props.handler.favoriteHandler} />
-        </div>
+        </ButtonsContainerDiv>
+        <AboutMe aboutMe={props.profile.aboutMe} lookingFor={props.profile.lookingFor} />
+
     </ProfileWrapperDiv>
-)
+);
+
+const AboutMe = (props) => {
+    return (
+        <AboutMeDiv>
+            <p>
+                {props.aboutMe}
+            </p>
+            <p>
+                Seeking: {props.lookingFor}
+            </p>
+
+        </AboutMeDiv>
+    )
+}
+
 
 export default Profile;

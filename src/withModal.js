@@ -3,7 +3,7 @@ import React from 'react';
 const modelStyle = {
     display: "none",
     position: "fixed",
-    zIndex: "1",
+    zIndex: "5",
     paddingTop: "100px",
     left: "0",
     top: "0",
@@ -11,7 +11,7 @@ const modelStyle = {
     height: "100%",
     overflow: "auto",
     backgroundColor: "rgb(0,0,0)",
-    backgroundColor: "rgba(0,0,0,0.4)"
+    backgroundColor: "rgba(0,0,0,0.4)",
 }
 
 const modelContentStyle = {

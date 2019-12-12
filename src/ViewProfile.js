@@ -4,8 +4,9 @@ import styled from 'styled-components';
 // Styled components
 
 const imageStyle = `
-    width: 500px
-    height: auto`;
+    width: 100%;
+    height: auto;
+    `;
 const imageMenuStyle = `
     width: 100px
     height: 100px
@@ -111,8 +112,8 @@ export default class ViewProfile extends React.Component {
 
     
     render () {
-        console.log(this.props)
-        return  (<div>
+        if ( !this.props.profile ) return <div></div>
+        else return  (<div>
                     <h2>{this.props.profile.displayName}</h2>
                     <div>{this.imageMenu()}</div>
                     {this.profileAttributes()}

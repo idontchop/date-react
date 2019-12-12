@@ -9,12 +9,13 @@ const styleButtonFalse = {background: "grey"};
  */
 const StyledButton = styled.button`
     cursor: pointer;
-    padding: 5px 8px;
+    padding: 8px 12px;
     text-align: center;
-    font-size: 10px;
-    margin: 4px;
+    font-size: 15px;
+    margin: 5px;
     opacity: 0.8;
-    transition: 0.3s;
+    transition: 0.2s;
+    border-radius: 12px;
     background: ${props => props.target ? 'grey' : 'white' }
 
     &:hover {
@@ -34,9 +35,8 @@ const StyledButton = styled.button`
  * @param { target, handler, title, id} props 
  */
 const InteractionButtons = (props) => {
-
     return (
-        <StyledButton onClick={ () => props.handler(props.id) } target={props.target? 'true' : 'false' }> {props.title}
+        <StyledButton onClick={ () => props.handler(props.id) } target={props.target}> {props.title}
         </StyledButton>
     )
 }

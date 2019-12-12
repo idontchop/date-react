@@ -19,6 +19,7 @@ class DatingSearchContainer extends React.Component {
         this.likeHandlerUrl = '/dating/addLike';
         this.favoriteHandlerUrl = '/dating/addFav';
         this.hideHandlerUrl = '/dating/addHide';
+        this.blockHandlerUrl = '/dating/addBlock';
 
 
         // data structure for profiles
@@ -119,13 +120,19 @@ class DatingSearchContainer extends React.Component {
      * Ran when the user changes the search parameters, location changed, etc.
      */
     newSearch () {
+        
+
+        // reset paging parameters
+        this.setState ( {perPage: 5, page: 0, maxPage: 0} );
         console.log(this.getUrl());
+
         fetch ( this.getUrl(), this.headerArgs)
         .then ( response => response.json() )
         .then ( responseData => this.setState ({data: responseData}))
         .catch ( err => console.error(err));
 
         // load interactions after getting the search
+        // ran in componentdidupdate
        
     }
 
@@ -245,10 +252,22 @@ class DatingSearchContainer extends React.Component {
             this.setState ( {data: {content: this.contentEdit}});
 
         })
-        .catch ( err => console.err(err));
+        .catch ( err => console.log(err));
     }
 
     blockHandler (targetId) {
+
+        fetch ( this.getUrl ("addBlock") + "?target=" + targetId, this.postHeaderArgs )
+        .then ( response => response.json() )
+        .then ( responseData => {
+            // TODO: check if add or remove
+
+            this.contentEdit =
+                this.state.data.content.filter ( e => e.id !== targetId);
+            this.setState ( {data: {content: this.contentEdit}});
+
+        })
+        .catch ( err => console.log(err));
 
     }
 
@@ -258,13 +277,21 @@ class DatingSearchContainer extends React.Component {
      * @param {} event 
      */
     handleSearchPrefChange = ( event ) => {
-
+    
         const target = event.target;
         const value = target.value;
         const name = target.name;
 
         this.setState ( { [name] : value, searchPrefsChanged: true } );
 
+    }
+
+    /**
+     * Receives the ticks on the age bar from compound-slider library
+     * [0: minage, 1: maxage ]
+     */
+    handleSearchAgePrefChange = ( event ) => {
+        this.setState ( { minAge: event[0], maxAge: event[1], searchPrefsChanged: true });
     }
 
     handleSearchSubmit = ( event ) => {
@@ -283,6 +310,7 @@ class DatingSearchContainer extends React.Component {
             <div>
             <MainSearchBar {...this.state} 
                 handleChange={this.handleSearchPrefChange }
+                handleAgeChange={this.handleSearchAgePrefChange }
                 handleSearchSubmit = { this.handleSearchSubmit } />
             <DatingListContainer content={this.state.data.content} handler={this.handler} />
             <button onClick={ () => this.loadMoreProfiles() }>Load More</button>
